@@ -1,7 +1,7 @@
 # Actividad 1 – Introducción a DevOps y DevSecOps
-**Nombre:** Jhon Edmilson Cruz Tairo
+**Nombre:** Jhon Edmilson Cruz Tairo\
 **Fecha:** 27/08/2025  
-**Tiempo total invertido (hh:mm):** 00:00  
+**Tiempo total invertido (hh:mm):** 06:30  
 
 **Contexto del entorno:** Trabajo en Linux Pop-OS, uso navegador Brave para inspeccionar HTTP/TLS y draw.io para diagramas. No se incluira datos sensibles
 
