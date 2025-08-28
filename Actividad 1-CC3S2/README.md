@@ -94,3 +94,113 @@ El "Teatro de Seguridad" ocurre al cumplir checklists sin reducir riesgos reales
 - Mantener tasa de conversión ≥ **95%** respecto al baseline en **24 horas**. Si cae por debajo, investigar antes de ampliar.
 
 ![](imagenes/pipeline_canary.png)
+
+## 4.6 FUNDAMENTOS PRACTICOS 
+### 1. **HTTP - contrato observable y TTL**
+### Conclusión
+![](imagenes/http-evidencia.png)
+
+El uso del método `GET` y el código `200 OK` confirma que el recurso fue solicitado y entregado correctamente
+Las cabeceras muestran que:  
+- `cache-control: max-age=0` obliga a revalidar en cada petición, lo que garantiza información fresca pero puede impactar en el rendimiento
+- `accept-encoding` habilita compresión en la respuesta, optimizando la velocidad de transferencia y uso de red
+
+En conjunto, estas cabeceras reflejan un balance entre **consistencia del contenido** y **eficiencia en la entrega**
+### 2. **TLS - certificado**
+- **CN/SAN:** github.com  
+- **Vigencia:** desde 4 de febrero de 2025 hasta 5 de febrero de 2026  
+- **Emisora:** Sectigo ECC Domain Validation Secure Server CA (Sectigo Limited)  
+![](imagenes/tls-cert.png)\
+si el certificado no valida la cadena se producen errores de confianza en el navegador  
+esto expone al usuario a riesgo de ataques man in the middle (MITM)  
+tambien afecta la experiencia de usuario ya que los navegadores muestran advertencias de sitio inseguro y pueden bloquear el acceso
+### 3. **Puertos - estado runtime**
+- **Puerto 631 (tcp, localhost):** servicio de impresión (CUPS)  
+- **Puerto 9050 (tcp, localhost):** servicio de proxy/Tor  
+![](imagenes/puertos.png)\
+la evidencia de puertos muestra que hay servicios activos en la máquina  
+si un servicio esperado no aparece en escucha significa que el despliegue no se completó correctamente  
+si un puerto ya está ocupado por otro proceso puede causar conflictos al intentar iniciar un nuevo servicio en ese mismo puerto
+### 4. **12-FACTOR resumen practico**
+- **Port binding:** la aplicación debe recibir el puerto desde una **variable de entorno** (p.ej. PORT) para que el mismo programa corra en cualquier entorno sin cambios
+- **Configuración:** separar configuración (credenciales, endpoints) en variables de entorno, no en el código
+- **Logs:** imprimir logs a la salida estándar (stdout) para que el sistema de ejecución los capture; no escribir logs en archivos locales manualmente
+**Anti-patrón:** guardar contraseñas en el código; esto rompe la reproducibilidad y es riesgo de seguridad
+
+### 5. **Diagnóstico de problemas intermitentes**
+
+* **Revisar contrato HTTP:**
+Confirma que el endpoint responde correctamente con código 200
+Verifica las cabeceras Cache-Control y X-Request-ID
+Si encuentras errores 5xx, revierte al despliegue anterior y crea un ticket
+
+* **Verificar resolución DNS:**
+Comprueba que el dominio apunta a la IP correcta
+Revisa los registros A/CNAME y su TTL correspondiente
+Si la IP es incorrecta, contacta al proveedor DNS y aplica rollback
+
+* **Comprobar certificado TLS:**
+Valida que el certificado es válido y no está expirado
+Confirma que el CN/SAN coincide con lo esperado
+Si está expirado, renueva el certificado y reinicia el servicio
+
+* **Confirmar puertos en escucha:**
+Verifica que el servicio está escuchando en el puerto correcto (ej: 443)
+Si el puerto no está abierto, revisa los logs y reinicia el contenedor
+
+* **Revisar recursos del host:**
+Monitoriza el consumo de CPU y memoria
+Si hay saturación, aumenta recursos o reinicia instancias de forma controlada
+
+* **Validar despliegues recientes:**
+Correlaciona los horarios de problemas con los últimos despliegues
+Si coincide, realiza rollback y programa una revisión post-mortem
+
+### 6. **Desafios y mitigaciones**
+- Cultural: resistencia al cambio. Mitigación: hacer sesiones conjuntas Dev+Ops y rotación temporal  
+- Técnico: falta de pruebas automatizadas. Mitigación: exigir coverage mínimo y pruebas en pipeline  
+- Gobernanza: responsabilidades poco claras. Mitigación: definir RACI y nombrar un responsable de seguridad
+
+![](imagenes/desafios_devops.png)
+
+### 7. Arquitectura mínima
+
+#### Flujo Principal de Arquitectura
+- **Cliente:** Navegador o aplicación con controles de validación TLS y políticas de caché  
+- **DNS:** Sistema de resolución de nombres con controles de TTL, DNSSEC y rate limiting  
+- **Servicio HTTP:** API/Web con validación de contratos API y headers de seguridad  
+- **TLS/SSL:** Capa de cifrado con controles de certificados y cipher suites modernas  
+- **Backend Services:** Aplicación con controles de rate limiting y validación de entrada  
+
+#### Principios 12-Factor con Evidencias
+
+**Configuración por entorno:**  
+- Evidencias: Diffs mínimos entre entornos, configuración externalizada, secrets en vaults seguros  
+- Contribuye a despliegues reproducibles al eliminar diferencias entre entornos  
+
+**Logs como flujos de eventos:**  
+- Evidencias: Trazabilidad completa, agregación centralizada, correlación de requests  
+- Permite monitorización en tiempo real y debugging eficiente  
+
+#### Beneficios de la Arquitectura
+- **Seguridad por capas:** Controles específicos en cada nivel (DNS, HTTP, TLS, Backend)  
+- **Despliegues reproducibles:** Configuración consistente entre entornos  
+- **Monitorización completa:** Trazabilidad de logs y métricas operativas  
+- **Cumplimiento de estándares:** Implementación de principios 12-Factor y mejores prácticas DevSecOps  
+![](imagenes/arquitectura_minima.png)
+
+### 8. Tabla de evidencias
+### Tabla de evidencias
+
+| Evidencia               | Descripción                                                        |
+|--------------------------|--------------------------------------------------------------------|
+| `http-evidencia.png`    | Método GET, código 200 y cabeceras (Cache-Control, Accept-Encoding) |
+| `tls-cert.png`          | Certificado CN/SAN, vigencia y emisor                              |
+| `puertos.png`           | Puertos en escucha en el host (631 y 9050)                         |
+| `desafios_devops.png`   | Desafíos (cultural, técnico, gobernanza) y sus mitigaciones        |
+| `arquitectura_minima.png` | Diagrama de arquitectura mínima con controles y principios 12-Factor |
+| `devops-vs-cascada.png` | Comparativa visual entre modelo en cascada y DevOps                |
+| `silos-equipos.png`     | Representación de silos y anti-patrones en ciclo tradicional        |
+| `pipeline_canary.png`   | Pipeline de despliegue canario con KPIs                            |
+
+
