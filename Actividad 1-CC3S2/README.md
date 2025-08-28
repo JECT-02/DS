@@ -48,3 +48,49 @@ Sin integracion continua, el ciclo tradicional se presenta de la siguiente maner
 * **Metadatos dePRs:** Extraer fechas de aprobación y merge desde plataformas como GitHub (API pública gratuita)
 * **Registro de despliegue:** Analizar logs de servidores (jenkings, scripts bash) para marcar el momento de despliegue en pruebas
 
+## 4.4 DevSecOps - SAST vs DAST y gate mínimo
+### SAST vs DAST en el Pipeline
+**SAST**(Static Application Security Testing) analiza el codigo fuente estaticamente, detectando vulnerabilidades tempranas en la fase de desarrollo (antes de hacer commit) `OWASP 2021`. **DAST** (Dynamic Application Security Testing) prueba la aplicación en ejecución, identificando fallos en entornos de prueba o producción `Kim et al 2016`\
+En el Pipeline, **SAST** se integra en la fase de codificación (CI), mientras que **DAST** se ejecuta en despliegues de prueba (CD)
+### GATE MINIMO DE SEGURIDAD
+1. **Umbral 1:** Cualquier hallazgo critico en componentes expuestos como Api o frontend bloquea la promoción a producción
+2. **Umbral 2:** Cobertura minima de pruebas de seguridad del 85% en SAST/DAST
+#### Politica de excepción:
+* **Condición:** Hallazgos no criticos pueden exceptuar con aprobación del equipo de seguridad
+* **Responsable:** Lider de seguirdad asignado
+* **Caducidad:** 30 dias máximo
+* **Plan de recolección:** Documentar solución en ticket con fecha limite
+
+### Evitar el "Teatro de Seguridad"
+El "Teatro de Seguridad" ocurre al cumplir checklists sin reducir riesgos reales, para evitarlo:
+1. **Señal 1: Disminución de hallazgos repetidos**
+* Comparar reportes SAST/DAST mensuales (logs de herramientas como SOnarQube o OWASP ZAP) para  rastrear recurrencias.
+2. **Señal 2: Reducción en tiempo de remedación**
+* Calcular el tiempo desde detección como bitacora de herramientas hasta la corrección con un merge en git, usando metadatos de PRs
+
+**Señales de eficacia (no "teatro"):**
+1. % de vulnerabilidades recurrentes ≤ **5%** entre dos escaneos consecutivos.  
+2. Tiempo de remediación de vulnerabilidades críticas ≤ **48 horas**.
+
+## 4.5 CI/CD y estrategia de despliegue — Canary
+
+**Estrategia elegida:** *Canary deployment* — desplegar primero a un pequeño porcentaje de usuarios y ampliar si no hay problemas. Es adecuada para servicios críticos (ej. autenticación) porque limita el impacto.
+
+**Tabla: riesgos vs mitigaciones**
+
+| Riesgo                         | Mitigación principal                                         |
+|-------------------------------:|--------------------------------------------------------------|
+| Regresión funcional            | Validación de contrato API antes de promover                 |
+| Costo operativo de doble versión | Limitar convivencia a **máx. 24 horas**; plan de cleanup     |
+| Manejo de sesiones/estado      | "Draining" de instancias y compatibilidad de esquemas        |
+
+**KPI técnico para promover/abortar**
+- **KPI primario:** Tasa de errores HTTP **5xx ≤ 0.1%**.  
+- **Ventana de observación:** **1 hora** desde el inicio del canary.  
+- **Otros límites:** Latencia **p95 ≤ 300 ms**; CPU/mem ≤ **70%**.  
+- **Acción:** Si algún KPI supera su umbral en la ventana, **rollback inmediato** del canary.
+
+**Métricas de producto (coexistencia):**
+- Mantener tasa de conversión ≥ **95%** respecto al baseline en **24 horas**. Si cae por debajo, investigar antes de ampliar.
+
+![](imagenes/pipeline_canary.png)
