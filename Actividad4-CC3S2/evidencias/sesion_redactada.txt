@@ -1,0 +1,42 @@
+Script started on 2025-09-02 11:02:52-05:00 [TERM="xterm-256color" TTY="/dev/pts/0" COLUMNS="158" LINES="39"]
+[?2004h]0;ject@pop-os: ~/Escritorio/DS/Actividad4-CC3S2ject@pop-os:~/Escritorio/DS/Actividad4-CC3S2$ uname -a > evidenciaass/uname.txt
+[?2004l
+[?2004h]0;ject@pop-os: ~/Escritorio/DS/Actividad4-CC3S2ject@pop-os:~/Escritorio/DS/Actividad4-CC3S2$ cat etc/etc/os-release >evidencia/os-release.txt
+[?2004l
+bash: evidencia/os-release.txt: No existe el archivo o el directorio
+[?2004h]0;ject@pop-os: ~/Escritorio/DS/Actividad4-CC3S2ject@pop-os:~/Escritorio/DS/Actividad4-CC3S2$ cat /etc/os-release >evidencia/os-release.txts/os-release.txt evidencias/os-release.txt
+[?2004l
+[?2004h]0;ject@pop-os: ~/Escritorio/DS/Actividad4-CC3S2ject@pop-os:~/Escritorio/DS/Actividad4-CC3S2$ hostnamectl > evidencias/hostanamectl.txt || Truetrue
+[?2004l
+[?2004h]0;ject@pop-os: ~/Escritorio/DS/Actividad4-CC3S2ject@pop-os:~/Escritorio/DS/Actividad4-CC3S2$ df -h > eividencias/df.txt
+[?2004l
+[?2004h]0;ject@pop-os: ~/Escritorio/DS/Actividad4-CC3S2ject@pop-os:~/Escritorio/DS/Actividad4-CC3S2$ free -h > evidencias/free.txt
+[?2004l
+[?2004h]0;ject@pop-os: ~/Escritorio/DS/Actividad4-CC3S2ject@pop-os:~/Escritorio/DS/Actividad4-CC3S2$ ls -la /etc > evicdencias/etc_list.txt
+[?2004l
+[?2004h]0;ject@pop-os: ~/Escritorio/DS/Actividad4-CC3S2ject@pop-os:~/Escritorio/DS/Actividad4-CC3S2$ id > evidencias>/id.txt
+[?2004l
+[?2004h]0;ject@pop-os: ~/Escritorio/DS/Actividad4-CC3S2ject@pop-os:~/Escritorio/DS/Actividad4-CC3S2$ 
+ -l | sed -n '1.,50p' > evidencia/sudo-l.txt
+[?2004l
+bash: evidencia/sudo-l.txt: No existe el archivo o el directorio
+[sudo] contraseña para ject: 
+ject@pop-os: ~/Escritorio/DS/Actividad4-CC3S2ject@pop-os:~/Escritorio/DS/Actividad4-CC3S2$ sudo -l | sed -n '1,50p' > evidencia/sudo-l.txts/sudo-l.txt
+[?2004l
+[?2004h]0;ject@pop-os: ~/Escritorio/DS/Actividad4-CC3S2ject@pop-os:~/Escritorio/DS/Actividad4-CC3S2$ find /tmp -mrtime -5 -type f -printf '%TY-%Tm%-%TDsd %TT %p\n' | sort > evidencias/tmp_modificados.txt
+[?2004l
+find: ‘/tmp/systemd-private-500b947dae114645908e0e981d3d57ad-dbus-broker.service-OP9B3D’: Permiso denegado
+find: ‘/tmp/systemd-private-500b947dae114645908e0e981d3d57ad-upower.service-PG8jcK’: Permiso denegado
+find: ‘/tmp/snap-private-tmp’: Permiso denegado
+find: ‘/tmp/systemd-private-500b947dae114645908e0e981d3d57ad-systemd-resolved.service-lRBLVG’: Permiso denegado
+find: ‘/tmp/systemd-private-500b947dae114645908e0e981d3d57ad-switcheroo-control.service-AOeWNM’: Permiso denegado
+find: ‘/tmp/systemd-private-500b947dae114645908e0e981d3d57ad-chrony.service-E8m0HZ’: Permiso denegado
+find: ‘/tmp/systemd-private-500b947dae114645908e0e981d3d57ad-ModemManager.service-SHuysX’: Permiso denegado
+find: ‘/tmp/systemd-private-500b947dae114645908e0e981d3d57ad-tor@default.service-6meuOX’: Permiso denegado
+find: ‘/tmp/systemd-private-500b947dae114645908e0e981d3d57ad-systemd-logind.service-fa6weQ’: Permiso denegado
+find: ‘/tmp/systemd-private-500b947dae114645908e0e981d3d57ad-fwupd.service-Ci9O68’: Permiso denegado
+find: ‘/tmp/systemd-private-500b947dae114645908e0e981d3d57ad-bluetooth.service-Ial3RV’: Permiso denegado
+find: ‘/tmp/systemd-private-500b947dae114645908e0e981d3d57ad-colord.service-1vDuwb’: Permiso denegado
+[?2004h]0;ject@pop-os: ~/Escritorio/DS/Actividad4-CC3S2ject@pop-os:~/Escritorio/DS/Actividad4-CC3S2$ sudo journalctl -p err..alert --since "today" > evidencias/jorunarurnalctl_error_today.txt
+[?2004l
+[?2004h]0;ject@

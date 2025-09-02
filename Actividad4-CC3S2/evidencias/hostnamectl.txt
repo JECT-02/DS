@@ -1,0 +1,10 @@
+ Static hostname: pop-os
+       Icon name: computer-laptop
+         Chassis: laptop
+      Machine ID: 4c48962d0d4dab90485f5cea686fcb82
+         Boot ID: 500b947dae114645908e0e981d3d57ad
+Operating System: Pop!_OS 22.04 LTS
+          Kernel: Linux 6.12.10-76061203-generic
+    Architecture: x86-64
+ Hardware Vendor: Lenovo
+  Hardware Model: IdeaPad 3 14IML05

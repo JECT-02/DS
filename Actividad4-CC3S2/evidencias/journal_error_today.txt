@@ -1,0 +1,18 @@
+sep 02 07:08:37 pop-os kernel: integrity: Problem loading X.509 certificate -65
+sep 02 07:08:40 pop-os kernel: ACPI BIOS Error (bug): Could not resolve symbol [\_TZ.ETMD], AE_NOT_FOUND (20240827/psargs-332)
+sep 02 07:08:40 pop-os kernel: ACPI Error: Aborting method \_SB.IETM._OSC due to previous error (AE_NOT_FOUND) (20240827/psparse-529)
+sep 02 07:08:41 pop-os bluetoothd[702]: Failed to set mode: Failed (0x03)
+sep 02 07:08:43 pop-os gnome-session-binary[1003]: GLib-GIO-CRITICAL: g_bus_get_sync: assertion 'error == NULL || *error == NULL' failed
+sep 02 07:08:43 pop-os gnome-session-binary[1003]: GLib-GIO-CRITICAL: g_bus_get_sync: assertion 'error == NULL || *error == NULL' failed
+sep 02 07:08:51 pop-os gdm-password][1349]: gkr-pam: unable to locate daemon control file
+sep 02 07:08:56 pop-os systemd[1360]: Failed to start Application launched by gnome-session-binary.
+sep 02 07:08:59 pop-os gdm-launch-environment][934]: GLib-GObject: g_object_unref: assertion 'G_IS_OBJECT (object)' failed
+sep 02 07:09:40 pop-os systemd[1]: Failed to start Network Manager Wait Online.
+sep 02 07:13:24 pop-os kernel: i915 0000:00:02.0: [drm] *ERROR* CPU pipe A FIFO underrun
+sep 02 08:06:04 pop-os [3507]: /usr/lib/systemd/system-sleep/pop-default-settings_bluetooth-suspend failed with exit status 1.
+sep 02 08:06:06 pop-os bluetoothd[702]: Failed to set mode: Failed (0x03)
+sep 02 08:21:40 pop-os kernel: i915 0000:00:02.0: [drm] *ERROR* CPU pipe A FIFO underrun
+sep 02 10:18:16 pop-os [6347]: /usr/lib/systemd/system-sleep/pop-default-settings_bluetooth-suspend failed with exit status 1.
+sep 02 10:18:18 pop-os bluetoothd[702]: Failed to set mode: Failed (0x03)
+sep 02 10:23:59 pop-os kernel: i915 0000:00:02.0: [drm] *ERROR* Atomic update failure on pipe A (start=20572 end=20573) time 281 us, min 1073, max 1079, scanline start 1066, end 1085
+sep 02 10:54:11 pop-os kernel: i915 0000:00:02.0: [drm] *ERROR* CPU pipe A FIFO underrun

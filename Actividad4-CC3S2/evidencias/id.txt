@@ -1,0 +1,1 @@
+uid=1000(ject) gid=1000(ject) grupos=1000(ject),4(adm),27(sudo),124(lpadmin)

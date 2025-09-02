@@ -1,0 +1,5 @@
+Coincidiendo entradas por defecto para ject en pop-os:
+    env_reset, mail_badpass, secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin, use_pty
+
+El usuario ject puede ejecutar los siguientes comandos en pop-os:
+    (ALL : ALL) ALL

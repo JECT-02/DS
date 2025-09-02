@@ -1,0 +1,1 @@
+[?2004h]0;ject@pop-os: ~/Escritorio/DS/Actividad4-CC3S2[01;32mject@pop-os[00m:[01;34m~/Escritorio/DS/Actividad4-CC3S2[00m$ sudo journalctl -p err..alert --since "today" > evidencias/jorunar[K[K[K[K[Kurnalctl[K[K[K_error_today.txt

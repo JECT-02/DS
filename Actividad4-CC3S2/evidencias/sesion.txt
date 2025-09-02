@@ -1,0 +1,42 @@
+Script started on 2025-09-02 11:02:52-05:00 [TERM="xterm-256color" TTY="/dev/pts/0" COLUMNS="158" LINES="39"]
+[?2004h]0;ject@pop-os: ~/Escritorio/DS/Actividad4-CC3S2[01;32mject@pop-os[00m:[01;34m~/Escritorio/DS/Actividad4-CC3S2[00m$ uname -a > evidenciaas[K[Ks/uname.txt
+[?2004l
+[?2004h]0;ject@pop-os: ~/Escritorio/DS/Actividad4-CC3S2[01;32mject@pop-os[00m:[01;34m~/Escritorio/DS/Actividad4-CC3S2[00m$ cat etc[K[K[K/etc/os-release >evidencia/os-release.txt
+[?2004l
+bash: evidencia/os-release.txt: No existe el archivo o el directorio
+[?2004h]0;ject@pop-os: ~/Escritorio/DS/Actividad4-CC3S2[01;32mject@pop-os[00m:[01;34m~/Escritorio/DS/Actividad4-CC3S2[00m$ cat /etc/os-release >evidencia/os-release.txt[Cs/os-release.txt evidencias/os-release.txt
+[?2004l
+[?2004h]0;ject@pop-os: ~/Escritorio/DS/Actividad4-CC3S2[01;32mject@pop-os[00m:[01;34m~/Escritorio/DS/Actividad4-CC3S2[00m$ hostnamectl > evidencias/hosta[Knamectl.txt || True[K[K[K[Ktrue
+[?2004l
+[?2004h]0;ject@pop-os: ~/Escritorio/DS/Actividad4-CC3S2[01;32mject@pop-os[00m:[01;34m~/Escritorio/DS/Actividad4-CC3S2[00m$ df -h > ei[Kvidencias/df.txt
+[?2004l
+[?2004h]0;ject@pop-os: ~/Escritorio/DS/Actividad4-CC3S2[01;32mject@pop-os[00m:[01;34m~/Escritorio/DS/Actividad4-CC3S2[00m$ free -h > evidencias/free.txt
+[?2004l
+[?2004h]0;ject@pop-os: ~/Escritorio/DS/Actividad4-CC3S2[01;32mject@pop-os[00m:[01;34m~/Escritorio/DS/Actividad4-CC3S2[00m$ ls -la /etc > evic[Kdencias/etc_list.txt
+[?2004l
+[?2004h]0;ject@pop-os: ~/Escritorio/DS/Actividad4-CC3S2[01;32mject@pop-os[00m:[01;34m~/Escritorio/DS/Actividad4-CC3S2[00m$ id > evidencias>[K/id.txt
+[?2004l
+[?2004h]0;ject@pop-os: ~/Escritorio/DS/Actividad4-CC3S2[01;32mject@pop-os[00m:[01;34m~/Escritorio/DS/Actividad4-CC3S2[00m$ 
+ -l | sed -n '1.[K,50p' > evidencia/sudo-l.txt
+[?2004l
+bash: evidencia/sudo-l.txt: No existe el archivo o el directorio
+[sudo] contraseña para ject: 
+ject@pop-os: ~/Escritorio/DS/Actividad4-CC3S2[01;32mject@pop-os[00m:[01;34m~/Escritorio/DS/Actividad4-CC3S2[00m$ sudo -l | sed -n '1,50p' > evidencia/sudo-l.txts/sudo-l.txt
+[?2004l
+[?2004h]0;ject@pop-os: ~/Escritorio/DS/Actividad4-CC3S2[01;32mject@pop-os[00m:[01;34m~/Escritorio/DS/Actividad4-CC3S2[00m$ find /tmp -mr[Ktime -5 -type f -printf '%TY-%Tm%[K-%TD[Ks[Kd %TT %p\n' | sort > evidencias/tmp_modificados.txt
+[?2004l
+find: ‘/tmp/systemd-private-500b947dae114645908e0e981d3d57ad-dbus-broker.service-OP9B3D’: Permiso denegado
+find: ‘/tmp/systemd-private-500b947dae114645908e0e981d3d57ad-upower.service-PG8jcK’: Permiso denegado
+find: ‘/tmp/snap-private-tmp’: Permiso denegado
+find: ‘/tmp/systemd-private-500b947dae114645908e0e981d3d57ad-systemd-resolved.service-lRBLVG’: Permiso denegado
+find: ‘/tmp/systemd-private-500b947dae114645908e0e981d3d57ad-switcheroo-control.service-AOeWNM’: Permiso denegado
+find: ‘/tmp/systemd-private-500b947dae114645908e0e981d3d57ad-chrony.service-E8m0HZ’: Permiso denegado
+find: ‘/tmp/systemd-private-500b947dae114645908e0e981d3d57ad-ModemManager.service-SHuysX’: Permiso denegado
+find: ‘/tmp/systemd-private-500b947dae114645908e0e981d3d57ad-tor@default.service-6meuOX’: Permiso denegado
+find: ‘/tmp/systemd-private-500b947dae114645908e0e981d3d57ad-systemd-logind.service-fa6weQ’: Permiso denegado
+find: ‘/tmp/systemd-private-500b947dae114645908e0e981d3d57ad-fwupd.service-Ci9O68’: Permiso denegado
+find: ‘/tmp/systemd-private-500b947dae114645908e0e981d3d57ad-bluetooth.service-Ial3RV’: Permiso denegado
+find: ‘/tmp/systemd-private-500b947dae114645908e0e981d3d57ad-colord.service-1vDuwb’: Permiso denegado
+[?2004h]0;ject@pop-os: ~/Escritorio/DS/Actividad4-CC3S2[01;32mject@pop-os[00m:[01;34m~/Escritorio/DS/Actividad4-CC3S2[00m$ sudo journalctl -p err..alert --since "today" > evidencias/jorunar[K[K[K[K[Kurnalctl[K[K[K_error_today.txt
+[?2004l
+[?2004h]0;ject@
