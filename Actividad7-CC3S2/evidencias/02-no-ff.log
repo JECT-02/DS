@@ -1,0 +1,15 @@
+*   bcdb1e3 (HEAD -> main) merge no ff
+|\  
+| * 15bc9f2 (add-feature) Archivo3 aniadido
+| * 6d4341b Archivo2 aniadido
+|/  
+| * 2e34160 (feature-1) Archivo1 aniadido
+|/  
+* 563a22a (origin/main, origin/HEAD) Actividad4-CC3S2
+* 2c4fb87 Actividad 2 CC3S2
+* 96a44f6 Correcion de errores dia 3 - Entrega final
+* b53dc7a Día 3-Evidencia, diagramas y entrega fina
+* 0c4b0dc Día 2-DevSecOps y estrategia de despliegue
+* 9a7e16f Día 1-Comparativos e imágenes base
+* 781a046 Create README.md
+* c02976e Initial commit
