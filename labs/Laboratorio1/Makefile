@@ -204,6 +204,15 @@ ufw-open: ## Abrir 80/443 en UFW (Linux)
 	  sudo ufw allow 443/tcp || true; \
 	else echo "UFW no está instalado (omitiendo)"; fi
 
+.PHONY: check-idempotency
+check-idempotency:
+	@echo "Testing HTTP idempotency with 3 consecutive requests..."
+	@for i in 1 2 3; do \
+		response=$$(curl -s http://127.0.0.1:$(PORT)); \
+		echo "Request $$i: $$response"; \
+	done
+
+
 .PHONY: check-tls
 check-tls: ## Validar handshake TLS y cabeceras con openssl/curl
 	@echo "openssl s_client"

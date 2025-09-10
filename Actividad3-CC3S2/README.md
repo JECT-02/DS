@@ -1,132 +1,154 @@
 # Actividad 3: Integración de DevOps y DevSecOps con HTTP, DNS, TLS y 12-Factor App
 
-## Parte Teórica
+## Parte Teorica
 
-### 1. Introducción a DevOps: ¿Qué es y qué no es?
+### 1. Introduccion a DevOps ¿Que es y que no es?
+DevOps es un enfoque cultural y tecnico que integra desarrollo y operaciones para acelerar el ciclo de vida del software, desde el codigo hasta la producción mediante automatizaciones, colaboración y retroalimentación continua. A diferencia de waterfall (que es secuencial, rigido y con fases aisladas), DevOps es iterativo y flexible.
 
-**DevOps** es una filosofía, cultura y conjunto de prácticas que busca integrar desarrollo (Dev) y operaciones (Ops) para acelerar la entrega de software de calidad mediante colaboración, automatización y feedback continuo. Desde el código hasta la producción, DevOps abarca la escritura de código, pruebas automatizadas, integración continua (CI), despliegue continuo (CD) y monitoreo en producción. A diferencia del modelo **waterfall**, que divide el desarrollo en fases secuenciales (requisitos, diseño, desarrollo, pruebas, despliegue), DevOps promueve ciclos cortos y entregas incrementales, reduciendo el tiempo entre idea y producción.
+En el laboratorio, esto se evidencia en el **Makefile**, que permite a los desarrolladoes ejecutar tareas de operacioens directamente, como desplegar a app con **make run**, configurar DNS con **make hosts-setup** o gestionar servicios systemd con **make systemd-install** implementando el principio *"you build it, you run it"*
 
-**Qué no es DevOps**:
-- **No es solo herramientas**: Aunque usa herramientas como Git, Jenkins o Docker, DevOps es principalmente cultural.
-- **No elimina Ops**: No reemplaza a los equipos de operaciones, sino que fomenta colaboración.
-- **No es caos sin procesos**: Implica disciplina, como gates de calidad para garantizar estabilidad.
+**MITOS VS REALIDADES**
 
-**"You build it, you run it"** en el laboratorio significa que el equipo que desarrolla la aplicación (app.py) también es responsable de su despliegue y monitoreo (Nginx, systemd). Por ejemplo, el Makefile podría incluir tareas para pruebas unitarias (`pytest`), linting (`flake8`) y despliegue (`systemctl reload nginx`), asegurando que los desarrolladores gestionen el ciclo completo.
+* **Mito:** DevOps son solo herramientas
+* **Realidad:** Es cultura, automatización, metricas y sharing (CALMS). Por ejemplo, el **Makefile** automatiza tareas, los logs en **app.py** permiten medicion y las configuraciones en **miapp.conf** son compartidas.
 
-**Mitos vs Realidades**:
-- **Mito**: DevOps es solo automatización con herramientas. **Realidad**: El marco **CALMS** (Culture, Automation, Lean, Measurement, Sharing) enfatiza la cultura y la colaboración. Por ejemplo, el laboratorio usa automatización (Makefile), pero requiere comunicación para alinear equipos.
-- **Mito**: DevOps elimina la necesidad de procesos. **Realidad**: Introduce gates de calidad, como verificar coverage de pruebas en el Makefile antes de un despliegue (`make test-coverage`).
-- **Ejemplo de gate de calidad en Makefile**:
-```makefile
-test-coverage:
-    pytest --cov=app --cov-report=xml --cov-fail-under=80
+**Mejoras de gate de calidad en makefile:** Podria añadirse un target que verifique TLS con `make check-tls` y falle si no se cumple TLS 1.3, evitando el despliegue. Por ejemplo:
+
+```bash
+.PHONY: tls-gate
+tls-gate:
+    @openssl s_client -connect miapp.local:443 -servername miapp.local -brief </dev/null | grep -q "TLSv1.3" || (echo "TLS 1.3 not supported"; exit 1)
 ```
-Este gate asegura que el coverage de pruebas sea ≥80% antes de permitir un despliegue.
 
-### 2. Marco CALMS en acción
+### 2. Marco CALMS en accion
 
-**CALMS** (Culture, Automation, Lean, Measurement, Sharing) es un marco para evaluar prácticas DevOps. A continuación, se describe cada pilar y su relación con el laboratorio:
+* **Cultura:** olaboración mediante scripts compartidos. Ejemplo: **systemd/miapp.service** permite a los desarrolladores gestionar el servicio directamente, rompiendo silos
+* **Automatizacion:** El **Makefile** automatiza tareas como `make prepare` (instala dependencias), `make nginx` (configuracion de proxy inverso) y `make tls-cert` (genera certificados)
+* **Lean:** Targets idempotentes como `make prepare` que solo instalan dependencias si no existen, minimizando desperdicios
+* **Medición:** Logs en stdout en `app.py` que podrian usars para monitoreo. Podrian agregar endpoints de salud como `\health`
+* **Sharing:** Configuraciones reusables como `nginx/miapp.conf` como proxy TLS y `netplan/01-miapp.yaml` (IP estatica). Para extender se podrian añadir runbooks para incidentes como fallos de certificados y postmorten tras fallos
 
-- **Culture**: Fomenta colaboración entre equipos. En el laboratorio, la configuración de Nginx y systemd requiere que desarrolladores y operaciones acuerden puertos y procesos, evitando silos.
-  - **Ejemplo**: El archivo `app.py` expone un endpoint `/health` que ambos equipos usan para monitorear.
-- **Automation**: Automatiza tareas repetitivas. El Makefile incluye tareas como `make build` (construir la app), `make test` (ejecutar pruebas) y `make deploy` (desplegar con systemd).
-  - **Ejemplo**: 
-    ```makefile
-    deploy:
-        sudo systemctl restart myapp
-    ```
-- **Lean**: Optimiza procesos para eliminar desperdicio. El laboratorio usa Netplan para configurar redes eficientemente, evitando configuraciones manuales propensas a errores.
-  - **Ejemplo**: Archivo Netplan (`/etc/netplan/01-netcfg.yaml`) define IPs estáticas para consistencia.
-- **Measurement**: Mide el desempeño para mejorar. El endpoint `/health` en `app.py` permite monitorear la salud de la aplicación, integrable con herramientas como Prometheus.
-  - **Ejemplo**: 
-    ```python
-    @app.route('/health')
-    def health():
-        return jsonify({"status": "healthy"})
-    ```
-- **Sharing**: Promueve compartir conocimientos. El laboratorio carece de runbooks, pero se podría extender con un archivo Markdown (`runbook.md`) que documente pasos para recuperación ante fallos (ej. reiniciar Nginx).
-  - **Propuesta de runbook**:
-    ```markdown
-    # Runbook: Recuperación de fallo en Nginx
-    1. Verificar logs: `sudo journalctl -u nginx`
-    2. Reiniciar servicio: `sudo systemctl restart nginx`
-    3. Probar endpoint: `curl http://localhost/health`
-    ```
+### 3. Vision Culturar de DevOps y paso a DevSecOps
+La colaboración evita silos: el Makefile permite a desarrolladores ejecutar tareas de operaciones, como `make hosts-setup` para configurar DNS o `make systemd-install`para gestionar servicios. DevSecOps integra seguridad desde el diseño, como se ve en:
 
-**Extensión de Sharing**: Crear un postmortem tras un fallo (ej. puerto ocupado). Documentar en equipo causas, impacto y mitigaciones en un archivo `postmortem.md`.
-
-### 3. Visión cultural de DevOps y paso a DevSecOps
-
-**Colaboración en DevOps** evita silos al alinear desarrolladores, operaciones y seguridad. En el laboratorio, configurar Nginx (`/etc/nginx/sites-available/myapp`) requiere que desarrolladores definan endpoints y operaciones aseguren puertos abiertos (ej. 80, 443). **DevSecOps** integra seguridad desde el diseño hasta producción, como configurar cabeceras TLS en Nginx o escanear dependencias en CI/CD.
-
-**Escenario retador: Fallo de certificado TLS**
-- **Problema**: El certificado TLS expira, causando errores HTTPS.
-- **Mitigación cultural**:
-  1. **Colaboración**: Equipo de seguridad notifica a desarrolladores y operaciones via Slack.
-  2. **Automatización**: Configurar un job CI/CD para renovar certificados con Let’s Encrypt (`certbot`).
-  3. **Sharing**: Documentar el fallo en un postmortem y actualizar el runbook.
-- **Solución técnica**:
-  ```bash
-  sudo certbot renew
-  sudo systemctl reload nginx
-  ```
-
-**Tres controles de seguridad sin contenedores y su lugar en CI/CD**:
-1. **Escaneo de dependencias** (ej. `pip-audit`): En CI, antes de construir la app, verificar vulnerabilidades en `requirements.txt`.
-   - **Ejemplo**: 
-     ```bash
-     pip-audit -r requirements.txt
-     ```
-2. **Cabeceras de seguridad en Nginx**: Configurar HSTS y CSP en `/etc/nginx/sites-available/myapp`.
-   - **Ejemplo**:
-     ```nginx
-     add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
-     add_header Content-Security-Policy "default-src 'self'";
-     ```
-   - **CI/CD**: Verificar cabeceras en pruebas de integración (`curl -I https://myapp`).
-3. **Restricción de puertos en Netplan**: Limitar acceso a puertos específicos (ej. 443) en `/etc/netplan/01-netcfg.yaml`.
-   - **CI/CD**: Validar configuración de red antes de despliegue con un script (`netplan try`).
+* **TLS en Nginx:** COnfigurado en `nginx/miapp.conf` con `ssl_protocols TLSv1.2 TLSv1.3` y redireccion HTTPS
+* **Generacióon de certificados:** Con `make tls-cert` usando OpenSSL
+* **Variables de entorno:** Usadas en `systemd/miapp.service` para configuraciones sensibles (PORT, MESSAGE)
+* **Escenario de fallo de certificado:** Si un certificado expira, la mitigacion cultural implica un blameless postmortem para documentar lecciones y mejorar procesos 
 
 ### 4. Metodología 12-Factor App
+En el laboratorio se demuestra el uso de 12-Factor App mediante:
+1. **Configuración de entorno:** Variables de entorno como `(PORT, MESSAGE, RELEASE)` definidas en `systemd/miapp.service` y leidas en `app.py` por ejemplo `os.enviroment.get("PORT")`
+2. **Port binding:** La app se vincula al puerto definido por PORT en `app.py` como ejemplo: app.run(host="127.0.0.1", port = PORT)
+3. **Logs como flujos de eventos:** Logs escritos en stdout con `print` en `app.py` ejemplo: `print(f"[INFO] GET / message={MESSAGE}")`
+4. **Stalessness:** La app no almacena estado, cada request es independiente (se podria mejorar) usar un archivo `.env`
 
-La metodología **12-Factor App** define principios para aplicaciones modernas. A continuación, se analizan 4 factores y su implementación en el laboratorio:
 
-1. **Config por entorno**:
-   - **Implementación**: Las variables de entorno (ej. `PORT`, `DB_URL`) se definen en `/etc/systemd/system/myapp.service`:
-     ```ini
-     [Service]
-     Environment="PORT=8080"
-     Environment="DB_URL=postgresql://user:pass@localhost/db"
-     ```
-   - **Fallo**: Si `app.py` tiene configuraciones hardcodeadas, viola este principio. **Mejora**: Usar `os.getenv` en `app.py`:
-     ```python
-     import os
-     port = int(os.getenv('PORT', 8080))
-     ```
+## PARTE PRACTICA
+### 1. Automatización reproducible con Make y Bash (Automation en CALMS)
+La ejecución de las automatizaciones en makefile se muestran:
 
-2. **Port binding**:
-   - **Implementación**: `app.py` se liga a un puerto dinámico (`PORT`) servido por Nginx como proxy inverso.
-     ```python
-     app.run(host='0.0.0.0', port=port)
-     ```
-   - **Fallo**: Si el puerto está hardcodeado, no es portable. **Mejora**: Validar `PORT` en CI/CD.
+![](images/1.1.png)
 
-3. **Logs como flujos**:
-   - **Implementación**: Los logs de `app.py` se envían a stdout y capturados por systemd (`journalctl -u myapp`).
-   - **Fallo**: Si `app.py` escribe logs a un archivo, viola este principio. **Mejora**: Usar `print` o `logging` a stdout:
-     ```python
-     import logging
-     logging.basicConfig(level=logging.INFO)
-     logging.info("Application started")
-     ```
+Creaccion del entorno virtual e instalación de las **dependencias necesarias** para el uso de `app.py`
 
-4. **Statelessness (ausencia de estado)**:
-   - **Implementación**: `app.py` no debería almacenar estado localmente, sino usar un backing service como PostgreSQL.
-   - **Reto**: Si `app.py` usa variables globales para estado, no es stateless. **Mejora**: Usar una base de datos externa:
-     ```python
-     from sqlalchemy import create_engine
-     engine = create_engine(os.getenv('DB_URL'))
-     ```
-   - **Backing services**: Configurar PostgreSQL como servicio externo, accesible via `DB_URL`.
+![](images/1.2.png)
 
-**Mejora general**: Auditar `app.py` para eliminar configuraciones hardcodeadas y agregar un endpoint `/metrics` para monitoreo, integrable con Prometheus.
+El resultado indica que ya se tiene configurado el dominio local de `miapp.local` en `/etc/hosts`, la aplicación **Flask** se esta ejecutando en `http://127.0.0.1:8080`, aunque no es recomendable para produccion usar servidor de desarrollo de **Flask**
+
+```console
+ject@pop-os:~/Escritorio/DS/labs/Laboratorio1$ ss -lnt | grep :8080
+LISTEN 0      128        127.0.0.1:8080       0.0.0.0:*  
+```
+Se evidencia que el puerto esta escuchando
+
+#### 1.1. Agregar un target para verificar idempotencia HTTP:
+Añadimos el siguiente target al **Makefile** para veriricar idempotencia HTTP y sus respuestas ante request:
+
+```bash
+.PHONY: check-idempotency
+check-idempotency:
+    @echo "Testing HTTP idempotency with 3 consecutive requests..."
+    @for i in 1 2 3; do \
+        response=$$(curl -s http://127.0.0.1:$(PORT)); \
+        echo "Request $$i: $$response"; \
+    done
+```
+
+Generamos 3 request consecutivas finalmente imprimimos las respuestas en consola con `echo` obteniendo:
+
+![](images/2.1.png)
+
+Se evidencia respuesta correcta y esperada para las 3 request y status `"ok"`
+
+#### 1.2. Cleap Up de servicios Nginx
+![](images/1.3.png)
+
+#### 1.3. Explicacion cómo lean minimiza fallos
+Los targets de **Makefile** son idempotentes (por ejemplo `make rpepare` solo instala si la venv no existe, y `make hosts-setup` solo añade la entrada al hosts si no esta presente). Esto evidencia redundantes y reduce errores, alineandose con los principios **Lean**
+
+
+### 2. De codigo a producción 12-Factor
+
+#### 2.1. Modificar variables sin tocar codigo
+Usamos el siguiente comando:
+```bash
+PORT=9090 MESSAGE="Mensaje de prueba 12-Factor" RELEASE="v2" make run
+```
+Y obtenemos el siguiente resultado:
+![](images/2.var.png)
+
+Inicializamos las variables de entorno antes de usar `make run` lo que implica que el **Makefile** estan preparados para leer los valores desde el entorno (usual en el 12-Factor App). Finalmente la aplicación se levanto correctamente en el puerto 9090 en lugar del 8080 por defecto.
+
+```console
+ject@pop-os:~/Escritorio/DS/labs/Laboratorio1$ ss -lnt | grep 9090
+LISTEN 0      128        127.0.0.1:9090       0.0.0.0:*
+```
+En efecto el puerto 9090 se encuentra en modo LISTEN. De igual manera la respuesta en **JSON** con `curl` se muestra:
+![](images/2.2.png)
+
+#### 2.2. Crear un artefacto inmutable con git archive
+Debemos crear un objeto inmutable para simular release en producción, segun el factor 5 de 12-Factor
+
+Usamos el siguiente comando:
+```bash
+git archive --format=zip -o release.zip HEAD
+```
+
+Su funcion es crear un archivo `release.zip` con el codigo del commit actual designado por `HEAD`
+
+Finalmente verificamos el contenido de `release.zip`
+![](images/2.2.1.png)
+
+#### 2.3. Documentacion variable -> efecto observable
+| Variable | Efecto observable |
+|----------|--------------------|
+| PORT     | Cambia el puerto en el que la aplicación escucha. Ej: Puerto 9090 en lugar de 8080. |
+| MESSAGE  | Cambia el mensaje en la respuesta JSON. Ej: "Nuevo mensaje desde 12-Factor" en lugar de "Hola". |
+| RELEASE  | Cambia la versión en la respuesta JSON. Ej: "v2" en lugar de "v0". |
+
+#### 2.4. Simular Fallo de backing (puerto equivocado) y resolver con disposability
+Para simular el fallo se hara un cambio temporal al archivo app.py con:
+
+```python
+if __name__ == "__main__":
+    app.run(host="127.0.0.1", port=80)  # Cambio a puerto 80
+```
+
+Al intentar ejecutar `make run` para inicializar la aplicación se obtiene:
+
+![](images/2.4.png)
+
+Obtenemos un error de permisos
+
+Finalmente modificamos temporalmente el archivo `miapp.service` para emular un error y analizarlo desde `systemctl`, obteniendo el siugiente output
+
+![](images/2.error.png)
+
+El error es el siguiente:
+
+```bash
+Main PID: 29478 (code=exited, status=203/EXEC)
+```
+El codigo de salida **203/EXEC** en `systemd`significa que no pudo ejecutar el binario indicado en `ExecStart` y dada la inconsistencia entre el `Makefile` y `systemd`, nos muestra el error ya visto
+
