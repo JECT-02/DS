@@ -1,0 +1,38 @@
+GNU Make 4.3
+Este programa fue construido para x86_64-pc-linux-gnu
+Copyright (C) 1988-2020 Free Software Foundation, Inc.
+Licencia GPLv3+: GNU GPL versión 3 o posterior <http://gnu.org/licenses/gpl.html>
+Este es software libre: cualquiera es libre para redistribuirlo y modificarlo.
+No existe GARANTÍA ALGUNA, hasta los límites permitidos por las leyes aplicables.
+Leyendo makefiles...
+Leyendo makefile 'Makefile'...
+Actualizando archivos makefiles....
+ Se considera el archivo objetivo 'Makefile'.
+  Buscando una regla implícita para 'Makefile'.
+  No se ha encontrado ninguna regla implícita para 'Makefile'.
+  Se terminaron las dependencias del archivo objetivo 'Makefile'.
+ No es necesario reconstruir el objetivo 'Makefile'..
+Actualizando los objetivos finales....
+Se considera el archivo objetivo 'build'.
+ El archivo 'build' no existe.
+  Se considera el archivo objetivo 'out/hello.txt'.
+   El archivo 'out/hello.txt' no existe.
+    Se considera el archivo objetivo 'src/hello.py'.
+     Buscando una regla implícita para 'src/hello.py'.
+     No se ha encontrado ninguna regla implícita para 'src/hello.py'.
+     Se terminaron las dependencias del archivo objetivo 'src/hello.py'.
+    No es necesario reconstruir el objetivo 'src/hello.py'..
+   Se terminaron las dependencias del archivo objetivo 'out/hello.txt'.
+  Se debe reconstruir el objetivo 'out/hello.txt'.
+mkdir -p out
+Se pone al proceso hijo 0x59bebe218530 (out/hello.txt) PID 21263 en la cadena.
+Hijo activo 0x59bebe218530 (out/hello.txt) PID 21263 
+Se recupera al proceso hijo ganador 0x59bebe218530 PID 21263 
+python3 src/hello.py > out/hello.txt
+Hijo activo 0x59bebe218530 (out/hello.txt) PID 21264 
+Se recupera al proceso hijo ganador 0x59bebe218530 PID 21264 
+Se elimina al proceso hijo 0x59bebe218530 PID 21264 de la cadena.
+  Se reconstruyó con éxito el archivo objetivo 'out/hello.txt'.
+ Se terminaron las dependencias del archivo objetivo 'build'.
+Se debe reconstruir el objetivo 'build'.
+Se reconstruyó con éxito el archivo objetivo 'build'.
