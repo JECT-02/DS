@@ -1,0 +1,14 @@
+2025-09-22 07:58:18 shellcheck scripts/run_tests.sh
+2025-09-22 07:58:18 
+2025-09-22 07:58:18 In scripts/run_tests.sh line 56:
+2025-09-22 07:58:18 if false | true; then
+2025-09-22 07:58:18            ^--^ SC2216 (warning): Piping to 'true', a command that doesn't read stdin. Wrong command or missing xargs?
+2025-09-22 07:58:18 
+2025-09-22 07:58:18 
+2025-09-22 07:58:18 In scripts/run_tests.sh line 60:
+2025-09-22 07:58:18 if false | true; then
+2025-09-22 07:58:18            ^--^ SC2216 (warning): Piping to 'true', a command that doesn't read stdin. Wrong command or missing xargs?
+2025-09-22 07:58:18 
+2025-09-22 07:58:18 For more information:
+2025-09-22 07:58:18   https://www.shellcheck.net/wiki/SC2216 -- Piping to 'true', a command that ...
+2025-09-22 07:58:18 make: *** [Makefile:39: lint] Error 1

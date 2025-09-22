@@ -1,0 +1,6 @@
+Demostrando pipefail:
+Sin pipefail: el pipe se considera exitoso (status 0).
+Con pipefail: se detecta el fallo (status != 0).
+Test pasó: Hello, World!
+exit=0
+exit=0

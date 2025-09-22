@@ -53,11 +53,13 @@ run_tests() {
 # Demostración de pipefail
 echo "Demostrando pipefail:"
 set +o pipefail
-if false | true; then
+# shellcheck disable=SC2216
+if false | true >/dev/null; then
 	echo "Sin pipefail: el pipe se considera exitoso (status 0)."
 fi
 set -o pipefail
-if false | true; then
+# shellcheck disable=SC2216
+if false | true >/dev/null; then
 	:
 else
 	echo "Con pipefail: se detecta el fallo (status != 0)."
@@ -67,6 +69,19 @@ fi
 cat <<'EOF' >|"$tmp"
 Testeando script Python
 EOF
+
+# Escribir ruta del temporal para pruebas
+mkdir -p out
+echo "$tmp" >|out/tmp_path.txt
+echo "Archivo temporal: $tmp"
+echo "Pausa de 3 segundos para permitir borrado manual..."
+sleep 3
+
+# Chequeo adicional: si el temporal desaparece, fallamos
+if [[ ! -f "$tmp" ]]; then
+	echo "Error: archivo temporal perdido"
+	exit 3
+fi
 
 # Ejecutar
 check_deps

@@ -1,0 +1,45 @@
++scripts/run_tests.sh:4: set -euo pipefail
++scripts/run_tests.sh:5: IFS='
+	'
++scripts/run_tests.sh:6: umask 027
++scripts/run_tests.sh:7: set -o noclobber
++scripts/run_tests.sh:10: PY=python3
++scripts/run_tests.sh:13: SRC_DIR=src
+++scripts/run_tests.sh:16: mktemp
++scripts/run_tests.sh:16: tmp=/tmp/tmp.oAu7BXlAVA
++scripts/run_tests.sh:27: trap 'cleanup $?' EXIT INT TERM
++scripts/run_tests.sh:54: echo 'Demostrando pipefail:'
+Demostrando pipefail:
++scripts/run_tests.sh:55: set +o pipefail
++scripts/run_tests.sh:56: false
++scripts/run_tests.sh:56: true
++scripts/run_tests.sh:57: echo 'Sin pipefail: el pipe se considera exitoso (status 0).'
+Sin pipefail: el pipe se considera exitoso (status 0).
++scripts/run_tests.sh:59: set -o pipefail
++scripts/run_tests.sh:60: false
++scripts/run_tests.sh:60: true
++scripts/run_tests.sh:63: echo 'Con pipefail: se detecta el fallo (status != 0).'
+Con pipefail: se detecta el fallo (status != 0).
++scripts/run_tests.sh:67: cat
++scripts/run_tests.sh:72: check_deps
++scripts/run_tests.sh:31:check_deps()  deps=('python3' 'grep')
++scripts/run_tests.sh:31:check_deps()  local -a deps
++scripts/run_tests.sh:32:check_deps()  for dep in "${deps[@]}"
++scripts/run_tests.sh:33:check_deps()  command -v python3
++scripts/run_tests.sh:32:check_deps()  for dep in "${deps[@]}"
++scripts/run_tests.sh:33:check_deps()  command -v grep
++scripts/run_tests.sh:73: run_tests src/hello.py
++scripts/run_tests.sh:42:run_tests()  local script=src/hello.py
++scripts/run_tests.sh:43:run_tests()  local output
+++scripts/run_tests.sh:44:run_tests()  python3 src/hello.py
++scripts/run_tests.sh:44:run_tests()  output='Hello, World!'
++scripts/run_tests.sh:45:run_tests()  echo 'Hello, World!'
++scripts/run_tests.sh:45:run_tests()  grep -Fq 'Hello, World!'
++scripts/run_tests.sh:50:run_tests()  echo 'Test pasó: Hello, World!'
+Test pasó: Hello, World!
++scripts/run_tests.sh:1: cleanup 0
++scripts/run_tests.sh:20:cleanup()  rc=0
++scripts/run_tests.sh:21:cleanup()  rm -f /tmp/tmp.oAu7BXlAVA
++scripts/run_tests.sh:22:cleanup()  '[' -f src/hello.py.bak ']'
++scripts/run_tests.sh:25:cleanup()  exit 0
+exit=0

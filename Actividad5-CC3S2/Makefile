@@ -52,14 +52,14 @@ tools: ## Verificar dependencias
 
 check: lint test ## Ejecutar lint y tests
 
-benchmark: | $(OUT_DIR) ## Medir tiempo de ejecución
+benchmark: clean ## Medir tiempo de ejecución
 	@mkdir -p $(OUT_DIR)
 	@echo "Benchmark: $(shell date '+%Y-%m-%d %H:%M:%S') / Commit: $(shell git rev-parse --short HEAD 2>/dev/null || echo 'N/A')" > $(OUT_DIR)/benchmark.txt
-	@if command -v /usr/bin/time >/dev/null 2>&1; then \
-	  /usr/bin/time -f "Tiempo: %E" make all >> $(OUT_DIR)/benchmark.txt 2>&1; \
-	else \
-	  time -p make all >> $(OUT_DIR)/benchmark.txt 2>&1; \
-	fi
+	@echo "=== Benchmark Results ===" >> $(OUT_DIR)/benchmark.txt
+	@echo "Tiempo de ejecución:" >> $(OUT_DIR)/benchmark.txt
+	@time $(MAKE) all 2>&1 | tee -a $(OUT_DIR)/benchmark.txt
+	@echo "=== Fin del benchmark ===" >> $(OUT_DIR)/benchmark.txt
+	@echo "Benchmark completado. Resultados en: $(OUT_DIR)/benchmark.txt"
 
 format: ## Formatear scripts con shfmt
 	$(SHFMT) -w scripts/run_tests.sh
@@ -69,7 +69,7 @@ dist-clean: clean ## Limpiar todo (incluye caches opcionales)
 	@rm -rf .ruff_cache
 
 verify-repro: ## Verificar que dist/app.tar.gz sea 100% reproducible
-	@rm -rf $(OUT_DIR) $(DIST_DIR); $(MAKE) -s package
+	@rm -rf $(OUT_DIR) $(DIST_DIR); $(MAKE) -s all package
 	@cp $(DIST_DIR)/app.tar.gz app1.tar.gz
 	@rm -rf $(OUT_DIR) $(DIST_DIR); $(MAKE) -s package
 	@cp $(DIST_DIR)/app.tar.gz app2.tar.gz
