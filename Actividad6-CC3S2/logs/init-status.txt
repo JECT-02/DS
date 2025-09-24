@@ -1,0 +1,11 @@
+Inicializado repositorio Git vacío en /home/ject/Escritorio/DS/Actividad6-CC3S2/.git/
+En la rama main
+
+No hay commits todavía
+
+Archivos sin seguimiento:
+  (usa "git add <archivo>..." para incluirlo a lo que será confirmado)
+	README.md
+	logs/
+
+no hay nada agregado al commit pero hay archivos sin seguimiento presentes (usa "git add" para hacerles seguimiento)
