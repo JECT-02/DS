@@ -174,3 +174,41 @@ Se usó `git status` para confirmar el archivo en conflicto (`index.html`). Con 
   - `git revert`: seguro, preserva el historial y evita conflictos con otros colaboradores  
   - `git reset`: peligroso en historial público, porque reescribe commits y obliga a otros a hacer `pull --force`, lo que puede causar pérdida de trabajo si no se sincroniza correctamente  
 
+### A) Fast-Forward seguro (merge seguro)
+El objetivo es permitir solo merges fast-forward, si no es posible debe fallar. Se crea la rama `feature-ffonly` desde `main` y se agrega un commit. En `main` se ejecuta `git merge --ff-only feature-ffonly` y funciona al ser un avance directo. Para mostrar el fallo se genera un commit adicional en `main` y al intentar el merge con `--ff-only` no se permite.
+
+- Evidencia en `evidencias/09-ff-only.log`
+
+### B) Rebase + FF (historial lineal con PRs)
+El objetivo es mantener un historial lineal sin merge commit. Se parte de la rama `feature-rebase` con 2 o 3 commits y se actualiza la base con `git fetch origin && git rebase origin/main`. Luego se integra a `main` mediante `git merge feature-rebase`, que avanza en fast-forward sin generar un commit de merge.  
+
+- Evidencia en `evidencias/10-rebase-ff.log`
+
+### C) Merge con validación previa (sin commitear)
+
+El objetivo es ejecutar validaciones antes de confirmar el merge. Se usa `git merge --no-commit --no-ff feature-validate`, lo que prepara el merge sin generar commit. En este estado se pueden correr linters o pruebas, por ejemplo `bash -n script.sh`, `python -m pyflakes || true` o un pipeline local con `make test && make lint`. Si todo pasa correctamente se sella con `git commit`.
+
+- Evidencia en `evidencias/11-pre-commit-merge.log`
+
+### D) Octopus Merge (varias ramas a la vez)
+El objetivo es integrar varias ramas triviales en un solo merge sin conflictos. Se preparan `feat-a` y `feat-b` con commits pequeños que no modifican las mismas líneas, luego en `main` se ejecuta `git merge feat-a feat-b` y se genera un único commit de merge.
+
+- Evidencia en `evidencias/12-octopus.log`
+
+### E) Subtree (integrar subproyecto conservando historial)
+El objetivo es integrar un subproyecto externo en un subdirectorio conservando su historial. Para ello se ejecuta `git subtree add --prefix=vendor/demo https://github.com/tu-usuario/repo-minimo.git main`, lo que incrusta el repo en la carpeta `vendor/demo`. Para mantenerlo sincronizado se usa `git subtree pull --prefix=vendor/demo https://github.com/tu-usuario/repo-minimo.git main`.
+
+- Evidencia en `evidencias/13-subtree.log`
+
+### F) Sesgos de resolución y normalización (algoritmo ORG)
+El objetivo fue probar distintas opciones del merge resolver para manejar conflictos o particularidades de los archivos:
+
+- `-X ours`: se priorizó la versión local en un conflicto simulado, manteniendo los cambios de `main` y descartando los de `feature-x`
+- `-X theirs`: se priorizó la versión de la rama integrada en un conflicto similar, conservando los cambios de `feature-x`
+- `-X find-renames=90%`: se ajustó la sensibilidad de detección de renombrados para identificar correctamente `archivo1.txt -> archivo_renombrado.txt`
+- `-X renormalize`: se aplicó para normalizar saltos de línea en `README.md`, útil en proyectos con desarrolladores en diferentes sistemas operativos
+
+### G) Firmar merges/commits (auditoria y cumplimiento)
+El objetivo es añadir trazabilidad criptográfica en el historial. Se configura la firma (GPG o Sigstore) vinculada al mismo correo de `git config user.email`, luego se realiza el merge con `git merge --no-ff --gpg-sign feature-signed`. Finalmente se verifica y registra la firma con `git log --show-signature -1`.
+
+- Evidencia en `evidencias/15-signed-merge.log`

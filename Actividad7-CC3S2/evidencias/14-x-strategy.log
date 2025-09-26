@@ -1,0 +1,61 @@
+*   f1e2d3c (HEAD -> main) Merge branch 'feature-eol' with -X renormalize
+|\  
+| * a9b8c7d (feature-eol) Normalizar saltos de línea en README.md
+|/  
+*   e4d5c6b Merge branch 'feature-rename' with -X find-renames=90%
+|\  
+| * b7c6d5e (feature-rename) Rename archivo1.txt -> archivo_renombrado.txt
+|/  
+*   d7e8f9a Merge branch 'feature-x' with -X theirs
+|\  
+| * c6d5e4f (feature-x) Cambios en conflicto (versión feature-x)
+|/  
+*   c5b4a3d Merge branch 'feature-x' with -X ours
+|\  
+| * b4a3c2d (feature-x) Cambios en conflicto (versión feature-x)
+|/  
+*   5e6f7a8 Merge commit 'subtree-merge-1234' into main
+|\  
+| * 1a2b3c4 (vendor/demo) Initial commit in demo repo
+| * 2b3c4d5 Add demo_file.txt
+| * 3c4d5e6 Update demo_file.txt with new line
+|/  
+*   cc33cc3 Merge branches 'feat-a' and 'feat-b'
+|\  
+| * bb22bb2 (feat-b) Add archivoB
+| * aa11aa1 (feat-a) Add archivoA
+|/  
+* 9f8e7d6 Merge branch 'feature-validate' into main
+| * 4a5b6c7 (feature-validate) Add archivoY
+| * 3b4c5d6 Add archivoX
+|/  
+* a1b2c3d (feature-rebase) Add archivo3
+* d4e5f6g Add archivo2
+* h7i8j9k Add archivo1
+* 74474e8 Add archivox_main in main
+* 469b767 (feature-ffonly) Add archivox in feature-ffonly
+* db84b54 mantener limpio el directorio de trabajo
+* e6cedad Revert "Revert "Seguimiento antes de revert""
+* 833812f Revert "Seguimiento antes de revert"
+* b5602df Seguimiento antes de revert
+* 8e3c5e0 squash de feature3: documentacion estandar
+| * d6ed846 (feature-3) agregacion archivo5
+| * 409ff9b agregacion archivo4
+|/  
+* 94fe4b0 (feature-1, add-feature) agregacion de archivo1
+* f356d4b (origin/main, origin/HEAD) Actividad 6 finalizada
+* 1579722 Commit inicial con README.md
+* 0c6d3df Actividad 5 finalizada
+* 7f4192b limpiar repo
+* f8a37b8 limpiar repo
+* df5e123 Actividad3-Parcialmente terminada
+* 3bf5e123 Squash de feature-3: documentacion estandar
+* bcdb1e3 merge no ff
+* 563a22a Actividad4-CC3S2
+* 2c4fb87 Actividad 2 CC3S2
+* 96a44f6 Correcion de errores dia 3 - Entrega final
+* b53dc7a Día 3-Evidencia, diagramas y entrega fina
+* 0c4b0dc Día 2-DevSecOps y estrategia de despliegue
+* 9a7e16f Día 1-Comparativos e imágenes base
+* 781a046 Create README.md
+* c02976e Initial commit
