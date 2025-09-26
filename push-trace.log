@@ -1,4 +1,0 @@
-18:41:18.574188 git.c:455               trace: built-in: git push origin main
-18:41:18.574793 run-command.c:668       trace: run_command: GIT_DIR=.git git remote-https origin https://github.com/JECT-02/DS.git
-18:41:18.577287 git.c:742               trace: exec: git-remote-https origin https://github.com/JECT-02/DS.git
-18:41:18.577337 run-command.c:668       trace: run_command: git-remote-https origin https://github.com/JECT-02/DS.git
